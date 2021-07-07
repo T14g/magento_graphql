@@ -1,0 +1,81 @@
+# Cria customer
+mutation {
+  createCustomer(
+    input: {
+      firstname: "Jimmy"
+      lastname: "Hendrix"
+      email: "hendrix@gmail.com"
+      password: "Senha1234"
+      is_subscribed: true
+    }
+  ) {
+    customer {
+      firstname
+      lastname
+      email
+      is_subscribed
+    }
+  }
+}
+
+
+# Realiza login e retorna token via mutation 
+mutation {
+  generateCustomerToken(
+    email: "hendrix@gmail.com",
+    password: "Senha1234"
+  ) {
+    token
+  }
+}
+
+# Retornar o name para por na tela no lugar de Entrar
+# Usar o token no header da GraphQL call
+# Authorization : Bearer 8dkwpyc2e1ttnwl76zvph3ubwdd0ac06(exemplo)
+{
+    customer {
+        firstname
+    }
+}
+
+
+# Mutation que dispara o email de redinição de senha
+mutation {
+  requestPasswordResetEmail(
+    email: "hendrix@gmail.com"
+  )
+}
+
+# Retorno Booleano
+{
+  "data": {
+    "requestPasswordResetEmail": true
+  }
+}
+
+# Mutation que altera a senha usando 
+# o resetPasswordToken que vem na URL enviada por email
+# Ou você pega na table customer_entity.rp_token
+
+mutation {
+  resetPassword(
+    email: "hendrix@gmail.com",
+    resetPasswordToken: "A03JOmxytHKVkE57SjXKtQOxAVKcUWhG",
+    newPassword: "SenhaNova1234"
+  )
+}
+
+# Retorno
+{
+  "data": {
+    "resetPassword": true
+  }
+}
+
+
+# Remove token de acesso ,quando for encerrar a sessão do user
+mutation {
+  revokeCustomerToken {
+    result
+  }
+} 
